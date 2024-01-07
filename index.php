@@ -30,7 +30,7 @@
                                 </div>         
                                 <button type="submit" class="btn btn-primary d-block m-auto" id="login_button">Zaloguj się</button>
                             </form>
-                            <a class="dropdown-item mt-3" href="#">Nie masz konta? <span class="text-primary">Zarejestruj się</span></a></p>
+                            <a class="dropdown-item mt-3" href="user_profile.php">Nie masz konta? <span class="text-primary">Zarejestruj się</span></a></p>
                         </div>
                     </li>
                 </ul>
@@ -132,7 +132,7 @@
                     </div>
                     <span class="fw-bold text-secondary">8 000 - 12 000 zł</span>
                     <div class="d-flex align-items-center" style="height: 65px;">
-                        <img src="https://logos.gpcdn.pl/loga-firm/16657333/ee4d0000-5df0-0015-6464-08db89cd072e_280x280.png?width=65&height=65" alt="" class="img-fluid" style="max-height: 170px"></a>
+                        <img src="https://logos.gpcdn.pl/loga-firm/16657333/ee4d0000-5df0-0015-6464-08db89cd072e_280x280.png?width=65&height=65" alt="" class="img-fluid" style="max-height: 170px">
                         <div class="d-flex flex-column">
                             <span>Sieć Badawcza Łukasiewicz - Instytut Lotnictwa</span>
                             <span class="fs-7">Warszawa</span>
@@ -151,7 +151,7 @@
                     </div>
                     <span class="fw-bold text-secondary">8 000 - 12 000 zł</span>
                     <div class="d-flex align-items-center" style="height: 65px;">
-                        <img src="https://logos.gpcdn.pl/loga-firm/16657333/ee4d0000-5df0-0015-6464-08db89cd072e_280x280.png?width=65&height=65" alt="" class="img-fluid" style="max-height: 170px"></a>
+                        <img src="https://logos.gpcdn.pl/loga-firm/16657333/ee4d0000-5df0-0015-6464-08db89cd072e_280x280.png?width=65&height=65" alt="" class="img-fluid" style="max-height: 170px">
                         <div class="d-flex flex-column">
                             <span>Sieć Badawcza Łukasiewicz - Instytut Lotnictwa</span>
                             <span class="fs-7">Warszawa</span>
@@ -170,7 +170,7 @@
                     </div>
                     <span class="fw-bold text-secondary">8 000 - 12 000 zł</span>
                     <div class="d-flex align-items-center" style="height: 65px;">
-                        <img src="https://logos.gpcdn.pl/loga-firm/16657333/ee4d0000-5df0-0015-6464-08db89cd072e_280x280.png?width=65&height=65" alt="" class="img-fluid" style="max-height: 170px"></a>
+                        <img src="https://logos.gpcdn.pl/loga-firm/16657333/ee4d0000-5df0-0015-6464-08db89cd072e_280x280.png?width=65&height=65" alt="" class="img-fluid" style="max-height: 170px">
                         <div class="d-flex flex-column">
                             <span>Sieć Badawcza Łukasiewicz - Instytut Lotnictwa</span>
                             <span class="fs-7">Warszawa</span>
@@ -189,7 +189,7 @@
                     </div>
                     <span class="fw-bold text-secondary">8 000 - 12 000 zł</span>
                     <div class="d-flex align-items-center" style="height: 65px;">
-                        <img src="https://logos.gpcdn.pl/loga-firm/16657333/ee4d0000-5df0-0015-6464-08db89cd072e_280x280.png?width=65&height=65" alt="" class="img-fluid" style="max-height: 170px"></a>
+                        <img src="https://logos.gpcdn.pl/loga-firm/16657333/ee4d0000-5df0-0015-6464-08db89cd072e_280x280.png?width=65&height=65" alt="" class="img-fluid" style="max-height: 170px">
                         <div class="d-flex flex-column">
                             <span>Sieć Badawcza Łukasiewicz - Instytut Lotnictwa</span>
                             <span class="fs-7">Warszawa</span>
@@ -208,7 +208,7 @@
                     </div>
                     <span class="fw-bold text-secondary">8 000 - 12 000 zł</span>
                     <div class="d-flex align-items-center" style="height: 65px;">
-                        <img src="https://logos.gpcdn.pl/loga-firm/16657333/ee4d0000-5df0-0015-6464-08db89cd072e_280x280.png?width=65&height=65" alt="" class="img-fluid" style="max-height: 170px"></a>
+                        <img src="https://logos.gpcdn.pl/loga-firm/16657333/ee4d0000-5df0-0015-6464-08db89cd072e_280x280.png?width=65&height=65" alt="" class="img-fluid" style="max-height: 170px">
                         <div class="d-flex flex-column">
                             <span>Sieć Badawcza Łukasiewicz - Instytut Lotnictwa</span>
                             <span class="fs-7">Warszawa</span>
