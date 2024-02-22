@@ -1,10 +1,10 @@
 <?php
-    require_once($_SERVER['DOCUMENT_ROOT'].'/gtech/database.php');
+    require($_SERVER['DOCUMENT_ROOT'].'/gwork/database.php');
 
     echo '
     <nav class="navbar navbar-expand-lg bg-white shadow-sm">
         <div class="container px-5">
-            <a class="navbar-brand fs-4" href="index.php">Gwork</a>
+            <a class="navbar-brand fs-4" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/index.php">Gwork</a>
             <button class="navbar-toggler ms-auto me-1" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="nav expander">
                 <span class="navbar-toggler-icon"></span>
             </button>

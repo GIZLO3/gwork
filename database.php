@@ -1,5 +1,4 @@
 <?php
-
     $config = array('host' => 'localhost', 'user' => 'root', 'password' => '', 'database' => 'gwork');
 
     try
@@ -12,4 +11,6 @@
     {
         echo "Błąd bazy danych: ".$e->getMessage();
     }
+
+    $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === 0 ? 'https://' : 'http://';
 ?>
