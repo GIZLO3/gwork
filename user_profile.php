@@ -1,42 +1,26 @@
+<?php
+    require_once($_SERVER['DOCUMENT_ROOT'].'/gwork/database.php');
+
+    session_start();
+
+    if(isset($_GET['id'])){
+        $query = $db->prepare("SELECT * FROM uzytkownik WHERE uzytkownik_id = :uzytkownik_id");
+        $query->bindValue(':uzytkownik_id', $_GET['id'], PDO::PARAM_INT);
+        $query->execute();
+        $account = $query->fetch();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Twój profil</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Gwork | Twój profil</title>
+    <link rel="stylesheet" href="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork/style.css"?>">
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm">
-        <div class="container px-5">
-            <a class="navbar-brand fs-4" href="index.php">Gwork</a>
-            <button class="navbar-toggler ms-auto me-1" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="nav expander">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        
-            <div class="collapse navbar-collapse" id="nav">  
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a type="button" class="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown" id="account_dropdown" aria-haspopop="true"><i class="bi bi-person-circle"></i> Konto użytkownika</a>
-                        <div aria-labbeledby="account_dropdown" class="dropdown-menu p-3">
-                            <form method="post" action="">
-                                <div class="form-floating my-3">
-                                    <input type="text" class="form-control" id="login" placeholder="Login" name="login">
-                                    <label for="login">Login</label>
-                                </div>
-                                <div class="form-floating my-3">
-                                    <input type="password" class="form-control" id="password" placeholder="Hasło" name="password">
-                                    <label for="password">Hasło</label>
-                                </div>         
-                                <button type="submit" class="btn btn-primary d-block m-auto" id="login_button">Zaloguj się</button>
-                            </form>
-                            <a class="dropdown-item mt-3" href="user_profile.php">Nie masz konta? <span class="text-primary">Zarejestruj się</span></a></p>
-                        </div>
-                    </li>
-                </ul>
-            </div>   
-        </div>       
-    </nav>
+    <?php require_once('create_navbar.php')?>
 
     <div class="container mt-5">
         <div class="row gy-2">
@@ -46,7 +30,7 @@
                         <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" class="img-fluid" style="max-height: 90px; border-radius: 100%;"></a>
                         <div class="d-flex flex-column justify-content-center ms-1">
                             <span class="fw-bold fs-5">Imię Nazwisko</span>
-                            <span>email@email.email</span>
+                            <span><?=$account['email']?></span>
                         </div>
                     </div>
                 </div>
@@ -65,10 +49,16 @@
                 </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-md-9">
                 <div class="rounded bg-white shadow-sm w-100 p-3">
                     <h5>Aktualne stanowisko pracy</h5>
                     <span>brak</span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="d-flex flex-column align-items-center justify-content-center rounded bg-white shadow-sm w-100 h-100 p-3">
+                    <a class="text-dark" href="">Edytuj Informacje</a>
+                    <a class="text-dark" href="">Edytuj Email/Hasło</a>
                 </div>
             </div>
 

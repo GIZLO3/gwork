@@ -59,14 +59,22 @@
         }
 
         if($succes){
-            $query = $db->prepare("INSERT into uzytkownik (login, email, haslo) VALUES (:login, :email, :haslo)");
+            $query = $db->prepare("INSERT INTO uzytkownik (login, email, haslo) VALUES (:login, :email, :haslo)");
             $query->bindValue(':login', $login, PDO::PARAM_STR);
             $query->bindValue(':email', $email, PDO::PARAM_STR);
             $pass_hash = password_hash($pass1, PASSWORD_DEFAULT);
             $query->bindValue(':haslo', $pass_hash, PDO::PARAM_STR);
             $query->execute();
-            header("Location: {$protocol}{$_SERVER['HTTP_HOST']}/gwork/index.php");
-            exit();
+
+            $query = $db->prepare("SELECT uzytkownik_id FROM uzytkownik WHERE uzytkownik_id=(SELECT MAX(uzytkownik_id) FROM uzytkownik) AND login = :login LIMIT 1");
+            $query->bindValue(':login', $login, PDO::PARAM_STR);
+            $query->execute();
+            $uzytkownik_id = $query->fetch();
+
+            $query = $db->prepare("INSERT INTO uzytkownik_informacje (uzytkownik_id) VALUES ({$uzytkownik_id['uzytkownik_id']})");
+            $query->execute();
+
+            header('Location: '.$protocol.$_SERVER['HTTP_HOST'].'/gwork/index.php');
         }
     }
 ?>

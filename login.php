@@ -33,5 +33,3 @@
         header("Location: " . $_SERVER["HTTP_REFERER"]);
     else
         header('Location: '.$protocol.$_SERVER['HTTP_HOST'].'/gwork/index.php');
-   
-    exit();

@@ -1,3 +1,7 @@
+<?php 
+    session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +11,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-light">
-    <?php require_once('create_navbar.php') ?>
+    <?php require_once('create_navbar.php')?>
 
     <div class="container">
         <div class="mt-5 p-3 d-flex flex-column align-items-center">

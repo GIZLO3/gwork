@@ -1,8 +1,6 @@
 <?php
     require_once($_SERVER['DOCUMENT_ROOT'].'/gwork/database.php');
-
-    session_start();
-
+    
     echo '
     <nav class="navbar navbar-expand-lg bg-white shadow-sm">
         <div class="container px-5">
@@ -17,7 +15,7 @@
                         if(!isset($_SESSION['is_logged_login']))
                         {
                             echo'
-                            <a type="button" class="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown" id="account_dropdown" aria-haspopop="true"><i class="bi bi-person-circle"></i> Konto użytkownika</a>
+                            <a type="button" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="account_dropdown" aria-haspopop="true"><i class="bi bi-person-circle"></i> Konto użytkownika</a>
                             <div aria-labbeledby="account_dropdown" class="dropdown-menu p-3">
                                 <form method="post" action="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/login.php">
                                     <div class="form-floating my-3">
