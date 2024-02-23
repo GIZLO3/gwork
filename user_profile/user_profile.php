@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork/style.css"?>">
 </head>
 <body class="bg-light">
-    <?php require_once('create_navbar.php')?>
+    <?php require_once($_SERVER['DOCUMENT_ROOT'].'/gwork/create_navbar.php');?>
 
     <div class="container mt-5">
         <div class="row gy-2">
@@ -49,19 +49,30 @@
                 </div>
             </div>
 
-            <div class="col-md-9">
+            <?php
+            if(isset($_SESSION['is_logged_login'])){
+                echo '<div class="col-md-9">';
+            }
+            else
+                echo '<div class="col-md-12">';
+
+            echo'
                 <div class="rounded bg-white shadow-sm w-100 p-3">
                     <h5>Aktualne stanowisko pracy</h5>
                     <span>brak</span>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="d-flex flex-column align-items-center justify-content-center rounded bg-white shadow-sm w-100 h-100 p-3">
-                    <a class="text-dark" href="">Edytuj Informacje</a>
-                    <a class="text-dark" href="">Edytuj Email/Hasło</a>
-                </div>
-            </div>
-
+            </div>';
+            if(isset($_SESSION['is_logged_login']))
+            {
+                echo '
+                <div class="col-md-3">
+                    <div class="d-flex flex-column align-items-center justify-content-center rounded bg-white shadow-sm w-100 h-100 p-3">
+                        <a class="text-dark" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/user_profile/edit_detailed_informations.php">Edytuj Informacje</a>
+                        <a class="text-dark" href="">Edytuj Email/Hasło</a>
+                    </div>
+                </div>';
+            }
+            ?>
             <div class="col-sm-12 col-md-6">
                 <div class="rounded bg-white shadow-sm w-100 p-3">
                     <h5>Podsumowanie zawodowe </h5>

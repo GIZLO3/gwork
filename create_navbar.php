@@ -45,7 +45,7 @@
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" 
                             id="account_dropdown" aria-haspopop="true"><i class="bi bi-person-circle"></i> '.$_SESSION['is_logged_login'].'</a>
                             <div class="dropdown-menu p-2 text-center">            
-                                <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/user_profile.php"><i class="bi bi-person"></i> Moje konto</a>
+                                <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/user_profile/user_profile.php?id='.$_SESSION['is_logged_id'].'"><i class="bi bi-person"></i> Moje konto</a>
                                 <a class="dropdown-item my-2" href=""><i class="bi bi-card-checklist"></i> Coś</a>
                                 <hr class"dropdown-divider">
                                 <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gtech/logout.php"><i class="bi bi-box-arrow-right"></i> Wyloguj się</a>
