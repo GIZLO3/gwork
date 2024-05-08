@@ -15,12 +15,12 @@
                         if(!isset($_SESSION['is_logged_login']))
                         {
                             echo'
-                            <a type="button" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="account_dropdown" aria-haspopop="true"><i class="bi bi-person-circle"></i> Konto użytkownika</a>
+                            <a type="button" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="account_dropdown" aria-haspopop="true"><i class="bi bi-person-circle"></i> Konto</a>
                             <div aria-labbeledby="account_dropdown" class="dropdown-menu p-3">
                                 <form method="post" action="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/login.php">
                                     <div class="form-floating my-3">
                                         <input type="text" class="form-control" id="login" placeholder="Login" name="login">
-                                        <label for="login">Login</label>
+                                        <label for="login">Login/Email</label>
                                     </div>
                                     <div class="form-floating my-3">
                                         <input type="password" class="form-control" id="password" placeholder="Hasło" name="password">
@@ -39,12 +39,24 @@
                                 <a class="dropdown-item mt-3" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/register.php">Nie masz konta? <span class="text-primary">Zarejestruj się</span></a></p>
                             </div>';
                         }
+                        else if(($_SESSION['is_logged_firm_id']))
+                        {
+                            echo'
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" 
+                            id="account_dropdown" aria-haspopop="true"><i class="bi bi-person-circle"></i> '.$_SESSION['is_logged_login'].'</a>
+                            <div class="dropdown-menu p-2 text-center fs-5">            
+                                <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/firm/firm.php?id='.$_SESSION['is_logged_firm_id'].'"><i class="bi bi-person"></i>Profil firmy</a>
+                                <a class="dropdown-item my-2" href=""><i class="bi bi-card-checklist"></i> Coś</a>
+                                <hr class"dropdown-divider">
+                                <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gtech/logout.php"><i class="bi bi-box-arrow-right"></i> Wyloguj się</a>
+                            </div>';
+                        }
                         else
                         {
                             echo'
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" 
                             id="account_dropdown" aria-haspopop="true"><i class="bi bi-person-circle"></i> '.$_SESSION['is_logged_login'].'</a>
-                            <div class="dropdown-menu p-2 text-center">            
+                            <div class="dropdown-menu p-2 text-center fs-5">            
                                 <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/user_profile/user_profile.php?id='.$_SESSION['is_logged_id'].'"><i class="bi bi-person"></i> Moje konto</a>
                                 <a class="dropdown-item my-2" href=""><i class="bi bi-card-checklist"></i> Coś</a>
                                 <hr class"dropdown-divider">

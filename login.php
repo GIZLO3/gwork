@@ -16,11 +16,19 @@
 
             $account = $query->fetch();
 
+            if(!$account){
+                $query = $db->prepare("SELECT * FROM uzytkownik WHERE email = :email");
+                $query->bindValue(':email', $login, PDO::PARAM_STR);
+                $query->execute();
+                $account = $query->fetch();
+            }
+
             if($account && password_verify($pass, $account['haslo'])){
                 $_SESSION['is_logged_login'] = $account['login'];
                 $_SESSION['is_logged_id'] = $account['uzytkownik_id'];
                 $_SESSION['is_logged_email'] = $account['email'];
-                //$_SESSION['is_admin'] = $account['admin'];
+                $_SESSION['is_logged_info_id'] = $account['informacje_id'];
+                $_SESSION['is_logged_firm_id'] = $account['firma_id'];
                 unset($_SESSION['login_error']);
             }
             else{

@@ -14,12 +14,13 @@
     <?php require_once('create_navbar.php')?>
 
     <div class="container">
-        <div class="mt-5 p-3 d-flex flex-column align-items-center">
+        
+        <div class="mt-3 p-3 d-flex flex-column align-items-center">
             <span class="fs-4"><b class="text-primary fs-3">12 312</b> sprawdzonych ofert pracy</span>
             <span class="fs-5">od najlepszych pracodawców!</span>
         </div>
 
-        <div class="rounded bg-white shadow-sm p-3 mt-5">
+        <div class="rounded  p-3 mt-2">
             <form action="">
                 <div class="row gx-1 gy-2">
                     <div class="col-12 col-md-4 col-lg-4">
@@ -97,7 +98,9 @@
             </form>
         </div>
 
-        <h3 class="mt-5 text-primary">Najnowsze oferty</h3>
+        <hr>
+
+        <h3 class="text-primary">Najnowsze oferty</h3>
         <div class="row gy-2">
             <div class="col-sm-12 col-md-6 col-lg-4">
                 <div class="rounded bg-white shadow-sm w-100 p-2">

@@ -3,11 +3,25 @@
 
     session_start();
 
+    if($_SESSION['is_logged_firm_id'] != null)
+        header('Location: '.$protocol.$_SERVER['HTTP_HOST'].'/gwork/index.php');
+
     if(isset($_GET['id'])){
         $query = $db->prepare("SELECT * FROM uzytkownik WHERE uzytkownik_id = :uzytkownik_id");
         $query->bindValue(':uzytkownik_id', $_GET['id'], PDO::PARAM_INT);
         $query->execute();
         $account = $query->fetch();
+
+        $query = $db->prepare("SELECT * FROM uzytkownik_informacje WHERE informacje_id = :informacje_id");
+        $query->bindValue(':informacje_id', $account['informacje_id'], PDO::PARAM_INT);
+        $query->execute();
+        $detailed_info = $query->fetch();
+    }
+    else{
+        if(isset($_SERVER["HTTP_REFERER"])) 
+            header("Location: " . $_SERVER["HTTP_REFERER"]);
+        else
+            header('Location: '.$protocol.$_SERVER['HTTP_HOST'].'/gwork/index.php');
     }
 ?>
 
@@ -29,7 +43,7 @@
                     <div class="d-flex">
                         <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" class="img-fluid" style="max-height: 90px; border-radius: 100%;"></a>
                         <div class="d-flex flex-column justify-content-center ms-1">
-                            <span class="fw-bold fs-5">Imię Nazwisko</span>
+                            <span class="fw-bold fs-5"><?=$detailed_info['imie'].' '.$detailed_info['nazwisko']?></span>
                             <span><?=$account['email']?></span>
                         </div>
                     </div>
@@ -40,9 +54,9 @@
                     <div class="row" style="height: 90px;">
                         <div class="col-12">
                             <div class="d-flex flex-column justify-content-center h-100">
-                                <span><i class="bi bi-telephone fw-bold"></i> Nr telefonu:  +48 123 123 123</span> 
-                                <span><i class="bi bi-calendar"></i> Data urodzenia: ??.??.????</span> 
-                                <span><i class="bi bi-house"></i> Miejsce zamieszkania: ul. ?????? ??, ??-??? ????????</span>
+                                <span><i class="bi bi-telephone fw-bold"></i> Nr telefonu:  <?=$detailed_info['numer_telefonu']?></span> 
+                                <span><i class="bi bi-calendar"></i> Data urodzenia: <?=$detailed_info['data_urodzenia']?></span> 
+                                <span><i class="bi bi-house"></i> Miejsce zamieszkania: <?=$detailed_info['adres'].' '.$detailed_info['kod_pocztowy'].' '.$detailed_info['miasto']?></span>
                             </div>                          
                         </div>
                     </div>
@@ -59,7 +73,7 @@
             echo'
                 <div class="rounded bg-white shadow-sm w-100 p-3">
                     <h5>Aktualne stanowisko pracy</h5>
-                    <span>brak</span>
+                    <span>'.$detailed_info['stanowisko_pracy'].'</span>
                 </div>
             </div>';
             if(isset($_SESSION['is_logged_login']))
@@ -67,8 +81,8 @@
                 echo '
                 <div class="col-md-3">
                     <div class="d-flex flex-column align-items-center justify-content-center rounded bg-white shadow-sm w-100 h-100 p-3">
-                        <a class="text-dark" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/user_profile/edit_detailed_informations.php">Edytuj Informacje</a>
-                        <a class="text-dark" href="">Edytuj Email/Hasło</a>
+                        <a class="text-dark" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/user_profile/edit_detailed_informations.php"><i class="bi bi-pencil-square"></i> Edytuj Informacje</a>
+                        <a class="text-dark" href=""><i class="bi bi-pencil-square"></i> Edytuj Email/Hasło</a>
                     </div>
                 </div>';
             }
@@ -77,11 +91,16 @@
                 <div class="rounded bg-white shadow-sm w-100 p-3">
                     <h5>Podsumowanie zawodowe </h5>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">An item</li>
-                        <li class="list-group-item">A second item</li>
-                        <li class="list-group-item">A third item</li>
-                        <li class="list-group-item">A fourth item</li>
-                        <li class="list-group-item">And a fifth one</li>
+                        <?php
+                            $ocupation_summary = json_decode($detailed_info['podsumowanie_zawodowe']);
+
+                            for($i = 0; $i < count($ocupation_summary); $i++){
+                                echo '
+                                <li class="list-group-item">
+                                    '.$ocupation_summary[$i].'
+                                </li>';
+                            }
+                        ?>
                     </ul>
                 </div>
             </div>
@@ -89,11 +108,16 @@
                 <div class="rounded bg-white shadow-sm w-100 p-3">
                     <h5>Doświadczenie zawodowe</h5>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">An item</li>
-                        <li class="list-group-item">A second item</li>
-                        <li class="list-group-item">A third item</li>
-                        <li class="list-group-item">A fourth item</li>
-                        <li class="list-group-item">And a fifth one</li>
+                        <?php
+                            $work_experience = json_decode($detailed_info['doswiadczenie_zawodowe']);
+
+                            for($i = 0; $i < count($work_experience); $i++){
+                                echo '
+                                <li class="list-group-item">
+                                    '.$work_experience[$i].'
+                                </li>';
+                            }
+                        ?>
                     </ul>
                 </div>
             </div>
@@ -102,11 +126,16 @@
                 <div class="rounded bg-white shadow-sm w-100 p-3">
                     <h5>Znajomość języków </h5>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">An item</li>
-                        <li class="list-group-item">A second item</li>
-                        <li class="list-group-item">A third item</li>
-                        <li class="list-group-item">A fourth item</li>
-                        <li class="list-group-item">And a fifth one</li>
+                        <?php
+                            $languages = json_decode($detailed_info['jezyki']);
+
+                            for($i = 0; $i < count($languages); $i++){
+                                echo '
+                                <li class="list-group-item">
+                                    '.$languages[$i].'
+                                </li>';
+                            }
+                        ?>
                     </ul>
                 </div>
             </div>
@@ -114,11 +143,16 @@
                 <div class="rounded bg-white shadow-sm w-100 p-3">
                     <h5>Umiejętności</h5>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">An item</li>
-                        <li class="list-group-item">A second item</li>
-                        <li class="list-group-item">A third item</li>
-                        <li class="list-group-item">A fourth item</li>
-                        <li class="list-group-item">And a fifth one</li>
+                        <?php
+                            $skills = json_decode($detailed_info['umiejetnosci']);
+
+                            for($i = 0; $i < count($skills); $i++){
+                                echo '
+                                <li class="list-group-item">
+                                    '.$skills[$i].'
+                                </li>';
+                            }
+                        ?>
                     </ul>
                 </div>
             </div>
@@ -127,11 +161,16 @@
                 <div class="rounded bg-white shadow-sm w-100 p-3">
                     <h5>Kursy, szkolenia, certyfikaty </h5>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">An item</li>
-                        <li class="list-group-item">A second item</li>
-                        <li class="list-group-item">A third item</li>
-                        <li class="list-group-item">A fourth item</li>
-                        <li class="list-group-item">And a fifth one</li>
+                        <?php
+                            $courses = json_decode($detailed_info['kursy']);
+
+                            for($i = 0; $i < count($courses); $i++){
+                                echo '
+                                <li class="list-group-item">
+                                    '.$courses[$i].'
+                                </li>';
+                            }
+                        ?>
                     </ul>
                 </div>
             </div>
