@@ -3,13 +3,12 @@
 
     session_start();
 
-    if(!isset($_SESSION['is_logged_login'])){
+    if(!isset($_SESSION['is_logged_login']) || isset($_SESSION['is_logged_firm_id'])){
         if(isset($_SERVER["HTTP_REFERER"])) 
             header("Location: " . $_SERVER["HTTP_REFERER"]);
         else
             header('Location: '.$protocol.$_SERVER['HTTP_HOST'].'/gwork/index.php');
     }
-
     $query = $db->prepare("SELECT * FROM uzytkownik JOIN uzytkownik_informacje USING(informacje_id) WHERE uzytkownik_id = :uzytkownik_id");
     $query->bindValue(':uzytkownik_id', $_SESSION['is_logged_id'], PDO::PARAM_INT);
     $query->execute();
@@ -141,10 +140,26 @@
             $i++;
         } 
 
+        $dir = $_SERVER['DOCUMENT_ROOT'].'/gwork/img/';
+        if(isset($_FILES['profile_picture']))
+        {
+            $info = explode('.', strtolower( $_FILES['profile_picture']['name'])); 
+
+            if (in_array( end($info), array("jpg", "jpeg", "png", "webp")))
+            {
+                if (move_uploaded_file( $_FILES['profile_picture']['tmp_name'], $dir . basename($_FILES['profile_picture']['name'])))
+                {
+                    $profile_picture = "/img/".$_FILES['profile_picture']['name'];
+                }
+            }
+            else
+                $profile_picture = $informations['zdjecie_profilowe'];
+        }
 
         if($succes)
         {
             $query = $db->prepare("UPDATE uzytkownik_informacje SET imie = :imie, nazwisko = :nazwisko, numer_telefonu = :numer_telefonu, data_urodzenia = :data_urodzenia, adres = :adres, kod_pocztowy = :kod_pocztowy, miasto = :miasto, 
+                zdjecie_profilowe = :zdjecie_profilowe,
                 stanowisko_pracy = :stanowisko_pracy, 
                 podsumowanie_zawodowe= :podsumowanie_zawodowe,
                 doswiadczenie_zawodowe = :doswiadczenie_zawodowe,
@@ -159,7 +174,8 @@
                 ':data_urodzenia' => $birth_date,
                 ':adres' => $address,
                 ':kod_pocztowy' => $postal_code,
-                ':miasto' => $city,
+                ':zdjecie_profilowe' => $profile_picture,
+                ':miasto' => $city,     
                 ':stanowisko_pracy' => $ocupation,
                 ':podsumowanie_zawodowe' => json_encode($ocupation_summary),
                 ':doswiadczenie_zawodowe' => json_encode($work_experience),
@@ -183,13 +199,13 @@
     <link rel="stylesheet" href="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork/style.css"?>">
 </head>
 <body class="bg-light">
-    <form action="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork/user_profile/edit_detailed_informations.php"?>" method="post">
+    <form action="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork/user_profile/edit_detailed_informations.php"?>" method="post" enctype="multipart/form-data">
         <div class="container mt-4">
             <div class="row gy-2">
                 <div class="col-sm-12 col-md-5">
                     <div class="rounded bg-white shadow-sm w-100 h-100 p-3">
                         <div class="d-flex align-items-center h-100">
-                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" class="img-fluid me-2" style="max-height: 90px; border-radius: 100%;"></a>
+                            <img src="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork".$informations['zdjecie_profilowe']?>" alt="zdjęcie_profilowe" class="img-fluid me-2" style="height: 90px; width: 90px; border-radius: 100%;"></a>
                             <div class="d-flex flex-column justify-content-center ms-1">
                                 <div class="input-group">
                                     <div class="form-floating">
@@ -201,6 +217,8 @@
                                         <label for="surname">Nazwisko</label>
                                     </div>
                                 </div>
+                                <span class="mt-2 fw-bold">Zmień zdjęcie</span>
+                                <input type="file" class="form-control" name="profile_picture" id="profile_picture">
                             </div>
                         </div>
                     </div>

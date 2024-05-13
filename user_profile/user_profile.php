@@ -2,26 +2,29 @@
     require_once($_SERVER['DOCUMENT_ROOT'].'/gwork/database.php');
 
     session_start();
-
-    if($_SESSION['is_logged_firm_id'] != null)
-        header('Location: '.$protocol.$_SERVER['HTTP_HOST'].'/gwork/index.php');
-
+        
     if(isset($_GET['id'])){
         $query = $db->prepare("SELECT * FROM uzytkownik WHERE uzytkownik_id = :uzytkownik_id");
         $query->bindValue(':uzytkownik_id', $_GET['id'], PDO::PARAM_INT);
         $query->execute();
         $account = $query->fetch();
 
-        $query = $db->prepare("SELECT * FROM uzytkownik_informacje WHERE informacje_id = :informacje_id");
-        $query->bindValue(':informacje_id', $account['informacje_id'], PDO::PARAM_INT);
-        $query->execute();
-        $detailed_info = $query->fetch();
+        if($account != null){
+            if($account['firma_id'] != null){
+                header('Location: '.$protocol.$_SERVER['HTTP_HOST'].'/gwork/firm/firm.php?id='.$account['firma_id']);
+            }
+    
+            $query = $db->prepare("SELECT * FROM uzytkownik_informacje WHERE informacje_id = :informacje_id");
+            $query->bindValue(':informacje_id', $account['informacje_id'], PDO::PARAM_INT);
+            $query->execute();
+            $detailed_info = $query->fetch();
+        }
+        else{
+            redirectToPreviousPage();
+        }
     }
     else{
-        if(isset($_SERVER["HTTP_REFERER"])) 
-            header("Location: " . $_SERVER["HTTP_REFERER"]);
-        else
-            header('Location: '.$protocol.$_SERVER['HTTP_HOST'].'/gwork/index.php');
+        redirectToPreviousPage();
     }
 ?>
 
@@ -41,7 +44,7 @@
             <div class="col-sm-12 col-md-5">
                 <div class="rounded bg-white shadow-sm w-100 p-3">
                     <div class="d-flex">
-                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" class="img-fluid" style="max-height: 90px; border-radius: 100%;"></a>
+                        <img src="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork".$detailed_info['zdjecie_profilowe']?>" alt="zdjęcie_profilowe" class="img-fluid" style="height: 90px; width: 90px; border-radius: 100%;"></a>
                         <div class="d-flex flex-column justify-content-center ms-1">
                             <span class="fw-bold fs-5"><?=$detailed_info['imie'].' '.$detailed_info['nazwisko']?></span>
                             <span><?=$account['email']?></span>
@@ -64,8 +67,11 @@
             </div>
 
             <?php
-            if(isset($_SESSION['is_logged_login'])){
-                echo '<div class="col-md-9">';
+            if(isset($_SESSION['is_logged_id'])){
+                if($account['uzytkownik_id'] == $_SESSION['is_logged_id'])
+                    echo '<div class="col-md-9">';
+                else
+                    echo '<div class="col-md-12">';
             }
             else
                 echo '<div class="col-md-12">';
@@ -76,15 +82,17 @@
                     <span>'.$detailed_info['stanowisko_pracy'].'</span>
                 </div>
             </div>';
-            if(isset($_SESSION['is_logged_login']))
+            if(isset($_SESSION['is_logged_id']))
             {
-                echo '
-                <div class="col-md-3">
-                    <div class="d-flex flex-column align-items-center justify-content-center rounded bg-white shadow-sm w-100 h-100 p-3">
-                        <a class="text-dark" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/user_profile/edit_detailed_informations.php"><i class="bi bi-pencil-square"></i> Edytuj Informacje</a>
-                        <a class="text-dark" href=""><i class="bi bi-pencil-square"></i> Edytuj Email/Hasło</a>
-                    </div>
-                </div>';
+                if($account['uzytkownik_id'] == $_SESSION['is_logged_id']){
+                    echo '
+                    <div class="col-md-3">
+                        <div class="d-flex flex-column align-items-center justify-content-center rounded bg-white shadow-sm w-100 h-100 p-3">
+                            <a class="text-dark" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/user_profile/edit_detailed_informations.php"><i class="bi bi-pencil-square"></i> Edytuj Informacje</a>
+                            <a class="text-dark" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/user_profile/edit_informations.php?id='.$account['uzytkownik_id'].'"><i class="bi bi-pencil-square"></i> Edytuj Email/Hasło</a>
+                        </div>
+                    </div>';
+                }
             }
             ?>
             <div class="col-sm-12 col-md-6">

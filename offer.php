@@ -1,52 +1,44 @@
+<?php
+    session_start();
+
+    require_once($_SERVER['DOCUMENT_ROOT'].'/gwork/database.php');
+
+    if(isset($_GET['id'])){
+        $query = $db->prepare("SELECT * FROM ogloszenie JOIN firma USING(firma_id) JOIN kategoria USING(kategoria_id) JOIN rodzaj_umowy USING(rodzaj_umowy_id) 
+            JOIN poziom_stanowiska USING(poziom_stanowiska_id) JOIN wymiar_pracy USING(wymiar_pracy_id) JOIN tryb_pracy USING(tryb_pracy_id) 
+            WHERE ogloszenie_id = :ogloszenie_id");
+        $query->bindValue(':ogloszenie_id', $_GET['id'], PDO::PARAM_INT);
+        $query->execute();
+        $offer = $query->fetch();
+
+        if($offer == null)
+            redirectToPreviousPage();
+    }
+    else{
+        redirectToPreviousPage();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Młodszy Inżynier/Inżynier - Konstruktor Części Silnika Lotniczego</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork/style.css"?>">
+    <title><?=$offer['stanowisko']?></title>
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm">
-        <div class="container px-5">
-            <a class="navbar-brand fs-4" href="index.php">Gwork</a>
-            <button class="navbar-toggler ms-auto me-1" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="nav expander">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        
-            <div class="collapse navbar-collapse" id="nav">  
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a type="button" class="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown" id="account_dropdown" aria-haspopop="true"><i class="bi bi-person-circle"></i> Konto użytkownika</a>
-                        <div aria-labbeledby="account_dropdown" class="dropdown-menu p-3">
-                            <form method="post" action="">
-                                <div class="form-floating my-3">
-                                    <input type="text" class="form-control" id="login" placeholder="Login" name="login">
-                                    <label for="login">Login</label>
-                                </div>
-                                <div class="form-floating my-3">
-                                    <input type="password" class="form-control" id="password" placeholder="Hasło" name="password">
-                                    <label for="password">Hasło</label>
-                                </div>         
-                                <button type="submit" class="btn btn-primary d-block m-auto" id="login_button">Zaloguj się</button>
-                            </form>
-                            <a class="dropdown-item mt-3" href="user_profile.php">Nie masz konta? <span class="text-primary">Zarejestruj się</span></a></p>
-                        </div>
-                    </li>
-                </ul>
-            </div>   
-        </div>       
-    </nav>
+    <?php require_once($_SERVER['DOCUMENT_ROOT'].'/gwork/create_navbar.php');?>
 
     <div class="container mt-5">
         <div class="rounded bg-white shadow-sm w-100 p-2">
-            <div class="row">
+            <div class="row g-1">
                 <div class="col-sm-12 col-md-9">
                     <div class="d-flex">
-                        <img src="https://logos.gpcdn.pl/loga-firm/16657333/ee4d0000-5df0-0015-6464-08db89cd072e_280x280.png?width=80&height=80" alt="" class="img-fluid" style="max-height: 80px">
-                        <div class="d-flex flex-column justify-content-center">
-                            <span class="fw-bold">Młodszy Inżynier/Inżynier - Konstruktor Części Silnika Lotniczego</span>
-                            <span>Sieć Badawcza Łukasiewicz - Instytut Lotnictwa</span>
+                        <img src="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork/".$offer['logo']?>" alt="<?=$offer['nazwa']?>" class="img-fluid" style="max-height: 80px">
+                        <div class="d-flex flex-column justify-content-center ms-1">
+                            <span class="fw-bold"><?=$offer['stanowisko']?></span>
+                            <a class="text-dark" href="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork/firm/firm.php?id=".$offer['firma_id']?>"><?=$offer['nazwa']?></a>
                         </div>
                     </div>
                 </div>
@@ -54,7 +46,7 @@
                     <div class="d-flex rounded border bg-light ms-auto align-items-center justify-content-center p-3">
                         <i class="bi bi-piggy-bank-fill fs-2 me-2"></i>
                         <div class="d-flex flex-column">
-                            <span class="fw-bold">8 000 - 12 000 zł</span>
+                            <span class="fw-bold"><?=$offer['wynagrodzenie_od']." - ".$offer['wynagrodzenie_do']." zł"?></span>
                             <span>brutto / mies.</span>
                         </div>   
                     </div>
@@ -63,84 +55,101 @@
         </div>
         <div class="rounded bg-white shadow-sm w-100 p-3 mt-2">
             <div class="row gy-2">
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded bg-light border offer-details-icon-box me-1">
+                            <i class="bi bi-tags fs-3 "></i>
+                        </div>
+                        <span>
+                            <?=$offer['kategoria']?>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded bg-light border offer-details-icon-box me-1">
+                            <i class="bi bi-clipboard fs-3"></i>
+                        </div>
+                        <span>
+                            <?=$offer['rodzaj_umowy']?>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded bg-light border offer-details-icon-box me-1">
+                            <i class="bi bi-bar-chart fs-3"></i>
+                        </div>
+                        <span>
+                            <?=$offer['poziom_stanowiska']?>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded bg-light border offer-details-icon-box me-1">
+                            <i class="bi bi-clock fs-3"></i>
+                        </div>
+                        <span>
+                            <?=$offer['wymiar_pracy']?>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded bg-light border offer-details-icon-box me-1">
+                            <i class="bi bi-geo-alt fs-3"></i>
+                        </div>
+                        <span>
+                            <?=$offer['ogloszenie_adres'].", ".$offer['ogloszenie_kod_pocztowy'].", ".$offer['ogloszenie_miasto']?>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded bg-light border offer-details-icon-box me-1">
+                            <i class="bi bi-clock-history fs-3"></i>
+                        </div>
+                        <span>
+                            ważna do: <?=$offer['waznosc']?>
+                        </span>
+                    </div>
+                </div>
                 <div class="col-12">
-                    <button href="#" class="btn btn-primary px-5 py-2 d-block ms-auto mt-2">Aplikuj</button>
-                    <hr>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-4">
-                    <div class="d-flex align-items-center">
-                        <div class="rounded bg-light border offer-details-icon-box me-1">
-                            <i class="bi bi-geo-alt fs-3 text-primary"></i>
-                        </div>
-                        <span>
-                            Aleja Krakowska 110/114, Włochy, Warszawa Warszawa, mazowieckie
-                        </span>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-4">
-                    <div class="d-flex align-items-center">
-                        <div class="rounded bg-light border offer-details-icon-box me-1">
-                            <i class="bi bi-clock-history fs-3 text-primary"></i>
-                        </div>
-                        <span>
-                            ważna do: 31 sty 2024
-                        </span>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-4">
-                    <div class="d-flex align-items-center">
-                        <div class="rounded bg-light border offer-details-icon-box me-1">
-                            <i class="bi bi-clipboard fs-3 text-primary"></i>
-                        </div>
-                        <span>
-                            umowa o pracę
-                        </span>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-4">
-                    <div class="d-flex align-items-center">
-                        <div class="rounded bg-light border offer-details-icon-box me-1">
-                            <i class="bi bi-clock fs-3 text-primary"></i>
-                        </div>
-                        <span>
-                            pełny etat
-                        </span>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-4">
-                    <div class="d-flex align-items-center">
-                        <div class="rounded bg-light border offer-details-icon-box me-1">
-                            <i class="bi bi-bar-chart fs-3 text-primary"></i>
-                        </div>
-                        <span>
-                            specjalista (mid / regular)
-                        </span>
-                    </div>
+                    <hr class="m-0">
+                    
+                    <button href="#" class="btn btn-primary px-5 py-2 d-block mt-2">Aplikuj</button>
                 </div>
             </div>
         </div>
         <div class="rounded bg-white shadow-sm w-100 p-3 mt-2">
             <h5 class="fw-bold text-primary">Twój zakres obowiązków</h5>
             <ul>
-                <li>Współpraca przy realizacji projektów dla naszego klienta strategicznego - firmy Baker Hughes</li>
-                <li>Analiza obszernych baz danych z zakresu eksploatacji i niezawodności silników lotniczych</li>
-                <li>Interpretacja wyników i opracowywanie wniosków na podstawie rezultatów przeprowadzonych analiz oraz rekomendacja usprawnień procesu modelowania</li>
-                <li>Tworzenie dokumentacji z zachowaniem obowiązujących standardów</li>
-                <li>Przeprowadzanie symulacji modelowania niezawodnościowego</li>
-                <li>Współpraca wewnątrz szeroko pojętego, międzynarodowego zespołu projektowego</li>
-                <li>Prezentowanie wyników analiz</li>
+                <?php
+                    $duties = json_decode($offer['obowiazki']);
+
+                    for($i = 0; $i < count($duties); $i++){
+                        echo '
+                        <li>
+                            '.$duties[$i].'
+                        </li>';
+                    }
+                ?>
             </ul>
         </div>
         <div class="rounded bg-white shadow-sm w-100 p-3 mt-2">
             <h5 class="fw-bold text-primary">Nasze wymagania</h5>
             <ul>
-                <li>Wykształcenie wyższe techniczne lub matematyczne (stopień inżyniera)</li>
-                <li>Podstawowa wiedza z dziedziny statystyki i/lub budowy turbin gazowych</li>
-                <li>Umiejętność wykorzystania wiedzy oraz wyciągania wniosków z przeprowadzanych analiz do opracowywanych modeli niezawodnościowych</li>
-                <li>Znajomość języka angielskiego na poziomie umożliwiającym swobodne komunikowanie się w międzynarodowym zespole</li>
-                <li>Znajomość pakietu MS Office, z naciskiem na zaawansowaną znajomość programu Excel</li>
-                <li>Otwartość na naukę i chęć zdobywania nowych umiejętności</li>
-                <li>Wysokie umiejętności komunikacyjne</li>
+                <?php
+                    $requirements = json_decode($offer['wymagania']);
+
+                    for($i = 0; $i < count($requirements); $i++){
+                        echo '
+                        <li>
+                            '.$requirements[$i].'
+                        </li>';
+                    }
+                ?>
             </ul>
         </div>
     </div>

@@ -4,12 +4,17 @@
     echo '
     <nav class="navbar navbar-expand-lg bg-white shadow-sm">
         <div class="container px-5">
-            <a class="navbar-brand fs-4" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/index.php">Gwork</a>
+            <a class="navbar-brand fs-4 me-4" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/index.php">Gwork</a>
             <button class="navbar-toggler ms-auto me-1" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="nav expander">
                 <span class="navbar-toggler-icon"></span>
             </button>
-        
+
             <div class="collapse navbar-collapse" id="nav">  
+                <ul class="navbar-nav mt-1 fs-5">
+                    <li class="nav-item">
+                        <a class="text-dark text-decoration-none" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/offers.php">Oferty</a>
+                    </li>
+                </ul>  
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown fs-5">';
                         if(!isset($_SESSION['is_logged_login']))
@@ -39,16 +44,16 @@
                                 <a class="dropdown-item mt-3" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/register.php">Nie masz konta? <span class="text-primary">Zarejestruj się</span></a></p>
                             </div>';
                         }
-                        else if(($_SESSION['is_logged_firm_id']))
+                        else if(isset($_SESSION['is_logged_firm_id']))
                         {
                             echo'
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" 
                             id="account_dropdown" aria-haspopop="true"><i class="bi bi-person-circle"></i> '.$_SESSION['is_logged_login'].'</a>
                             <div class="dropdown-menu p-2 text-center fs-5">            
                                 <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/firm/firm.php?id='.$_SESSION['is_logged_firm_id'].'"><i class="bi bi-person"></i>Profil firmy</a>
-                                <a class="dropdown-item my-2" href=""><i class="bi bi-card-checklist"></i> Coś</a>
+                                <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/firm/add_offer.php"><i class="bi bi-card-checklist"></i> Dodaj ogłoszenie</a>
                                 <hr class"dropdown-divider">
-                                <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gtech/logout.php"><i class="bi bi-box-arrow-right"></i> Wyloguj się</a>
+                                <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/logout.php"><i class="bi bi-box-arrow-right"></i> Wyloguj się</a>
                             </div>';
                         }
                         else
@@ -60,7 +65,7 @@
                                 <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/user_profile/user_profile.php?id='.$_SESSION['is_logged_id'].'"><i class="bi bi-person"></i> Moje konto</a>
                                 <a class="dropdown-item my-2" href=""><i class="bi bi-card-checklist"></i> Coś</a>
                                 <hr class"dropdown-divider">
-                                <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gtech/logout.php"><i class="bi bi-box-arrow-right"></i> Wyloguj się</a>
+                                <a class="dropdown-item my-2" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/logout.php"><i class="bi bi-box-arrow-right"></i> Wyloguj się</a>
                             </div>';
                         }
                     echo'

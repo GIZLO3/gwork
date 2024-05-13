@@ -54,36 +54,57 @@
         }
 
         if($pass2 != $pass1){
-            $successs = false;
+            $success = false;
             $_SESSION['pass2_error'] = "Hasła nie są identyczne!";
         }
 
-        if($success){
-            if(isset($_GET['registerFirm'])){     
-                $name = $_POST['name'];
-                $nip = $_POST['nip'];
-                $address = $_POST['address'];
-                $postal_code = $_POST['postal_code'];
-                $city = $_POST['city'];
-                $phone_number = $_POST['phone_number'];
-                $logo = "";
-                
-                $dir = $_SERVER['DOCUMENT_ROOT'].'/gwork/img/';
-                if(isset($_FILES['file']))
+        if(isset($_GET['registerFirm'])){  
+            $address = $_POST['address'];
+            $city = $_POST['city'];
+
+            $name = $_POST['name'];
+            if(mb_strlen($name) > 255){
+                $succes = false;
+                $_SESSION['name_error'] = "Niepoprawna nazwa firmy!"; 
+            }
+
+            $nip = $_POST['nip'];
+            if(!preg_match("/^[0-9]{10}$/", $nip)){
+                $succes = false;
+                $_SESSION['nip_error'] = "Niepoprawny nip!"; 
+            }
+
+            $postal_code = $_POST['postal_code'];
+            if(!preg_match('/^[0-9]{2}-?[0-9]{3}$/', $postal_code)){
+                $succes = false;
+                $_SESSION['postal_code_error'] = "Niepoprawny kod pocztowy!";
+            }
+
+            $phone_number = $_POST['phone_number'];
+            if(!preg_match("/^[A-Za-zóąśłżźćńÓĄŚŁŻŹĆŃ0-9\\s]*$/u", $phone_number) || strlen($phone_number) != 9){
+                $succes = false;
+                $_SESSION['phone_number_error'] = "Niepoprawny numer telefonu!";
+            }
+            
+            $dir = $_SERVER['DOCUMENT_ROOT'].'/gwork/img/';
+            if(isset($_FILES['file']))
+            {
+                $info = explode('.', strtolower( $_FILES['file']['name'])); 
+
+                if (in_array( end($info), array("jpg", "jpeg", "png", "webp")))
                 {
-                    $name = "ffgffff";
-
-                    $info = explode('.', strtolower( $_FILES['file']['name'])); 
-
-                    if (in_array( end($info), array("jpg", "jpeg", "png", "webp")))
+                    if (move_uploaded_file( $_FILES['file']['tmp_name'], $dir . basename($_FILES['file']['name'])))
                     {
-                        if (move_uploaded_file( $_FILES['file']['tmp_name'], $dir . basename($_FILES['file']['name'])))
-                        {
-                            $logo = "/img/".$_FILES['file']['name'];
-                        }
+                        $logo = "/img/".$_FILES['file']['name'];
                     }
                 }
+                else
+                    $success = false;
+            }
+        }
 
+        if($success){
+            if(isset($_GET['registerFirm'])){   
                 $query = $db->prepare("INSERT INTO firma (nazwa, logo, nip, adres, kod_pocztowy, miasto, telefon) VALUES(:nazwa, :logo, :nip, :adres, :kod_pocztowy, :miasto, :telefon)");
                 $query->execute(array(
                     ':nazwa' => $name,
@@ -103,7 +124,7 @@
                 $info_id = $db->lastInsertId();
                 $company_id = null;
             }
-            
+
             $query = $db->prepare("INSERT INTO uzytkownik (login, email, haslo, informacje_id, firma_id) VALUES (:login, :email, :haslo, :informacje_id, :firma_id)");
             $query->bindValue(':login', $login, PDO::PARAM_STR);
             $query->bindValue(':email', $email, PDO::PARAM_STR);
@@ -113,7 +134,7 @@
             $query->bindValue(':firma_id', $company_id, PDO::PARAM_INT);
             $query->execute();
 
-            header('Location: '.$protocol.$_SERVER['HTTP_HOST'].'/gwork/index.php');
+            header('Location: '.$protocol.$_SERVER['HTTP_HOST'].'/gwork/index.php'); 
         }
     }
 ?>
@@ -181,10 +202,10 @@
                         <div class="mb-3">
                             <label for="name" class="form-label">Nazwa firmy: </label>
                             <input type="text" class="form-control" id="name" name="name">';
-                            /*if(isset($_SESSION['login_error'])){
-                                echo '<b class="text-danger">'.$_SESSION['login_error'].'</b>'; 
-                                unset($_SESSION['login_error']);
-                            }*/
+                            if(isset($_SESSION['name_error'])){
+                                echo '<b class="text-danger">'.$_SESSION['name_error'].'</b>'; 
+                                unset($_SESSION['name_error']);
+                            }
                         echo '</div>';
 
                         echo '
@@ -197,10 +218,10 @@
                         <div class="mb-3">
                             <label for="nip" class="form-label">NIP: </label>
                             <input type="text" class="form-control" id="nip" name="nip">';
-                            /*if(isset($_SESSION['login_error'])){
-                                echo '<b class="text-danger">'.$_SESSION['login_error'].'</b>'; 
-                                unset($_SESSION['login_error']);
-                            }*/
+                            if(isset($_SESSION['nip_error'])){
+                                echo '<b class="text-danger">'.$_SESSION['nip_error'].'</b>'; 
+                                unset($_SESSION['nip_error']);
+                            }
                         echo '</div>';
 
                         echo '
@@ -211,20 +232,20 @@
                                 <input type="text" class="form-control" name="postal_code" placeholder="Kod pocztowy">
                                 <input type="text" class="form-control" name="city" placeholder="Miasto">
                             </div>';
-                            /*if(isset($_SESSION['login_error'])){
-                                echo '<b class="text-danger">'.$_SESSION['login_error'].'</b>'; 
-                                unset($_SESSION['login_error']);
-                            }*/
+                            if(isset($_SESSION['postal_code_error'])){
+                                echo '<b class="text-danger">'.$_SESSION['postal_code_error'].'</b>'; 
+                                unset($_SESSION['postal_code_error']);
+                            }
                         echo '</div>';
 
                         echo '
                         <div class="mb-3">
                             <label for="phone_number" class="form-label">Numer telefonu: </label>
                             <input type="text" class="form-control" id="phone_number" name="phone_number">';
-                            /*if(isset($_SESSION['login_error'])){
-                                echo '<b class="text-danger">'.$_SESSION['login_error'].'</b>'; 
-                                unset($_SESSION['login_error']);
-                            }*/
+                            if(isset($_SESSION['phone_number_error'])){
+                                echo '<b class="text-danger">'.$_SESSION['phone_number_error'].'</b>'; 
+                                unset($_SESSION['phone_number_error']);
+                            }
                         echo '</div>';
                     }
                 ?>
