@@ -39,7 +39,7 @@
     while($offer = $offers->fetch()){
         echo'
             <div class="col-sm-12 col-md-6 col-lg-4">
-                <a class="text-dark text-decoration-none" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/offer.php?id='.$offer['ogloszenie_id'].'">
+                <a class="text-dark text-decoration-none" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/offer/offer.php?id='.$offer['ogloszenie_id'].'">
                     <div class="rounded bg-white shadow-sm w-100 h-100 p-2 d-flex flex-column justify-content-evenly">
                         <div class="d-flex">
                             <span class="fw-bold text-wrap">'.$offer['stanowisko'].'</span>

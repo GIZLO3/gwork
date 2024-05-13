@@ -12,7 +12,7 @@
             <div class="collapse navbar-collapse" id="nav">  
                 <ul class="navbar-nav mt-1 fs-5">
                     <li class="nav-item">
-                        <a class="text-dark text-decoration-none" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/offers.php">Oferty</a>
+                        <a class="text-dark text-decoration-none" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/offer/offers.php">Oferty</a>
                     </li>
                 </ul>  
                 <ul class="navbar-nav ms-auto">

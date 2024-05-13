@@ -118,7 +118,7 @@
 
         <h3 class="text-primary">Oferty</h3>
         <div class="row gy-2" id="offers">
-            <?php require_once($_SERVER['DOCUMENT_ROOT'].'/gwork/get_offers.php'); ?>
+            <?php require_once($_SERVER['DOCUMENT_ROOT'].'/gwork/offer/get_offers.php'); ?>
         </div>
     </div>
 

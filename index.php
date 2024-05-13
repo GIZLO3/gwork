@@ -29,7 +29,7 @@
         </div>
 
         <div class="p-3 mt-2">
-            <form action="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork/offers.php"?>" method="post">
+            <form action="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork/offer/offers.php"?>" method="post">
                 <div class="row gx-1 gy-2">
                     <div class="col-12 col-md-4 col-lg-4">
                         <div class="form-floating">
@@ -136,7 +136,7 @@
                 while($offer = $query->fetch()){
                     echo'
                         <div class="col-sm-12 col-md-6 col-lg-4">
-                            <a class="text-dark text-decoration-none" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/offer.php?id='.$offer['ogloszenie_id'].'">
+                            <a class="text-dark text-decoration-none" href="'.$protocol.$_SERVER['HTTP_HOST'].'/gwork/offer/offer.php?id='.$offer['ogloszenie_id'].'">
                                 <div class="rounded bg-white shadow-sm w-100 h-100 p-2 d-flex flex-column justify-content-evenly">
                                     <div class="d-flex">
                                         <span class="fw-bold text-wrap">'.$offer['stanowisko'].'</span>

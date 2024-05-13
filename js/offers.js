@@ -1,5 +1,5 @@
 function get_data(data){
-    var url = location.protocol + '//' + location.hostname + '/gwork/get_offers.php';
+    var url = location.protocol + '//' + location.hostname + '/gwork/offer/get_offers.php';
     $.ajax({url: url, type: 'POST', cache: false, data: data,
     success: function (response) {
         document.getElementById("offers").innerHTML = response;

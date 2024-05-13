@@ -13,6 +13,24 @@
 
         if($offer == null)
             redirectToPreviousPage();
+
+        if(isset($_GET['apply'])){
+            $query = $db->prepare("SELECT * FROM aplikacja WHERE ogloszenie_id = :ogloszenie_id AND uzytkownik_id = :uzytkownik_id");
+            $query->bindValue(':ogloszenie_id', $_GET['id'], PDO::PARAM_INT);
+            $query->bindValue(':uzytkownik_id', $_SESSION['is_logged_id'], PDO::PARAM_INT);
+            $query->execute();
+    
+            if($query->rowCount() > 0)
+                redirectToPreviousPage();
+            else{
+                $query = $db->prepare("INSERT INTO aplikacja (uzytkownik_id, ogloszenie_id, status_aplikacji_id) VALUES ( :uzytkownik_id, :ogloszenie_id, 1)");
+                $query->bindValue(':uzytkownik_id', $_SESSION['is_logged_id'], PDO::PARAM_INT);
+                $query->bindValue(':ogloszenie_id', $_GET['id'], PDO::PARAM_INT);
+                $query->execute();
+    
+                redirectToPreviousPage();
+            }
+        }
     }
     else{
         redirectToPreviousPage();
@@ -25,7 +43,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork/style.css"?>">
-    <title><?=$offer['stanowisko']?></title>
+    <title>Gwork | <?=$offer['stanowisko']?></title>
 </head>
 <body class="bg-light">
     <?php require_once($_SERVER['DOCUMENT_ROOT'].'/gwork/create_navbar.php');?>
@@ -73,7 +91,7 @@
                         <span>
                             <?=$offer['rodzaj_umowy']?>
                         </span>
-                    </div>
+                    </div> 
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="d-flex align-items-center">
@@ -117,8 +135,7 @@
                 </div>
                 <div class="col-12">
                     <hr class="m-0">
-                    
-                    <button href="#" class="btn btn-primary px-5 py-2 d-block mt-2">Aplikuj</button>
+                    <a href="<?=$protocol.$_SERVER['HTTP_HOST']."/gwork/offer/offer.php?id=".$offer['ogloszenie_id']."&apply"?>" class="btn btn-primary px-auto py-2 d-block mt-2 <?php if(isset($_SESSION['is_logged_firm_id']) || !isset($_SESSION['is_logged_id'])) echo 'disabled'?>">Aplikuj</a>
                 </div>
             </div>
         </div>
